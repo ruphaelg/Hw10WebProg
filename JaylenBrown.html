@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+	<title>Jaylen Brown API</title>
+	<meta charset="utf-8"/>
+	<script>
+		function getJBinfo() {
+			/* Step 1: Make instance of request object...
+			...to make HTTP request after page is loaded*/
+			request = new XMLHttpRequest();
+			console.log("1 - request object created");
+ 
+			// Step 2: Set the URL for the AJAX request to be the JSON file
+ 
+		request.open("GET", "https://www.balldontlie.io/api/v1/players/70", true)
+
+			console.log("2 - opened request file");
+ 
+			// Step 3: set up event handler/callback
+
+			request.onreadystatechange = function() {
+				console.log("3 - readystatechange event fired.");
+ 
+				if (request.readyState == 4 && request.status == 200) {
+
+					// Step 5: wait for done + success
+					console.log("5 - response received");
+					result = request.responseText;
+				
+                    
+					jb = JSON.parse(result);
+					
+					document.getElementById("data").innerHTML = document.getElementById("data").innerHTML = "Standing at " + jb.height_feet + " \' " + jb.height_inches + "\"" + " and weighing in at " + jb.weight_pounds + ", the starting " + jb.position + " on the " + jb.team.full_name + " is " + jb.first_name + " " + jb.last_name + ". ";
+				             
+				}
+				else if (request.readyState == 4 && request.status != 200) {
+
+					document.getElementById("data").innerHTML = "Something is wrong!  Check the logs to see where this went off the rails";
+
+				}
+
+				else if (request.readyState == 3) {
+
+					document.getElementById("data").innerHTML = "Too soon!  Try again";
+
+				}
+
+			}
+		// Step 4: fire off the HTTP request
+			request.send();
+			console.log("4 - Request sent");
+		}
+        function setMessage(msg) {
+            document.getElementById("fetch").innerHTML = msg
+
+        }
+         function usingfetch(){
+            res = fetch("https://www.balldontlie.io/api/v1/players/70")
+                  .then(res => res.text())
+                  .then(data => 
+                      {
+                      data = JSON.parse(data)
+                      heightFT = data.height_feet;
+                      heightIN = data.height_inches;
+                      weight = data.weight_pounds;
+                      pos = data.position;
+                      team = data.team.full_name;
+                      Fname = data.first_name;
+                      Lname = data.last_name;
+setMessage("Standing at " + heightFT + " \' " + heightIN + "\"" + " and weighing in at " + weight + ", the starting " + pos + " on the " + team + " is " + Fname + " " + Lname + ". ")})
+                .catch(error => setMessage(error))
+            
+        
+                
+
+        }
+    
+	</script>
+    <style type="text/css">
+        #fetch, #data{
+            font-size: 25px;
+            font-weight: bolder;
+        }
+        h1{
+            text-align: center;
+            font-size: 40px;
+        }
+        body{
+            background-color: #1D5B19;
+            color: #DEB275;
+        }
+        div{
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+
+<body onload="getJBinfo();usingfetch();">
+
+	<h1>Jaylen Brown </h1>
+    <div id="data">Loading...</div>
+    <br>
+    <div id="fetch">Loading...</div>
+
+	
+    
+    <br>
+    <div class="questions" >
+        This API finds any NBA's player bio using an ID number that is based 
+        on an array of players that are arranged in alphabetical order of the 
+        player's last name. The website I found this on is 
+        https://www.balldontlie.io/#introduction The option I used for this API 
+        request was the ID number for Jaylen Brown which is based on his last 
+        name. This was how I was able to access his information. This API would 
+        be helpful to find the height, weight, or position of a NBA player.
+        The ony downside to this API is that the ID numbers to find a specific
+        player aren't made clear so I plugged in random IDs to get 
+        closer and closer until I found Jaylen Brown.
+    </div>
+</body>
+</html>
